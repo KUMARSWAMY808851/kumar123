@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduTrack - Student Management System</title>
+  <!-- Google Fonts & FontAwesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- AUTH SECTION (Login / Register) -->
+  <div id="auth-section" class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="brand-logo">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>EduTrack</span>
+        </div>
+        <h2 id="auth-title">Welcome Back</h2>
+        <p id="auth-subtitle">Sign in to manage student records and analytics</p>
+      </div>
+
+      <!-- Login Form -->
+      <form id="login-form" class="auth-form">
+        <div class="form-group">
+          <label for="login-username"><i class="fa-solid fa-user"></i> Username or Email</label>
+          <input type="text" id="login-username" required placeholder="e.g. admin or admin@example.com">
+        </div>
+        <div class="form-group">
+          <label for="login-password"><i class="fa-solid fa-lock"></i> Password</label>
+          <input type="password" id="login-password" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">
+          <i class="fa-solid fa-right-to-bracket"></i> Sign In
+        </button>
+        <p class="auth-switch">
+          Don't have an account? <a href="#" id="show-register">Register here</a>
+        </p>
+      </form>
+
+      <!-- Register Form -->
+      <form id="register-form" class="auth-form hidden">
+        <div class="form-group">
+          <label for="reg-username"><i class="fa-solid fa-user"></i> Username</label>
+          <input type="text" id="reg-username" required placeholder="e.g. jdoe">
+        </div>
+        <div class="form-group">
+          <label for="reg-email"><i class="fa-solid fa-envelope"></i> Email Address</label>
+          <input type="email" id="reg-email" required placeholder="e.g. jdoe@example.com">
+        </div>
+        <div class="form-group">
+          <label for="reg-password"><i class="fa-solid fa-lock"></i> Password</label>
+          <input type="password" id="reg-password" required placeholder="At least 6 characters">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">
+          <i class="fa-solid fa-user-plus"></i> Create Account
+        </button>
+        <p class="auth-switch">
+          Already have an account? <a href="#" id="show-login">Sign in here</a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <!-- MAIN APP SECTION (Dashboard & Student Management) -->
+  <div id="app-section" class="app-container hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          <i class="fa-solid fa-graduation-cap"></i>
+          <span>EduTrack</span>
+        </div>
+        <button id="sidebar-close-btn" class="sidebar-close-btn" aria-label="Close Sidebar">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="#" class="nav-link active" data-view="dashboard">
+              <i class="fa-solid fa-chart-pie"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-link" data-view="students">
+              <i class="fa-solid fa-users"></i>
+              <span>Students Directory</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="avatar"><i class="fa-solid fa-user-tie"></i></div>
+          <div class="user-details">
+            <span id="user-display-name" class="username">Admin</span>
+            <span id="user-display-email" class="user-email">admin@example.com</span>
+          </div>
+        </div>
+        <button id="logout-btn" class="btn-logout" title="Logout">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <div class="main-wrapper">
+
+      <!-- TOP NAVBAR -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle Navigation">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <h1 id="page-heading">Dashboard</h1>
+        </div>
+        <div class="topbar-right">
+          <button id="quick-add-btn" class="btn btn-primary btn-sm">
+            <i class="fa-solid fa-plus"></i> Add Student
+          </button>
+        </div>
+      </header>
+
+      <!-- VIEW: DASHBOARD -->
+      <main id="view-dashboard" class="content-view">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon bg-primary-light">
+              <i class="fa-solid fa-user-graduate color-primary"></i>
+            </div>
+            <div class="stat-details">
+              <span class="stat-label">Total Students</span>
+              <h3 id="stat-total-students" class="stat-value">0</h3>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon bg-success-light">
+              <i class="fa-solid fa-user-check color-success"></i>
+            </div>
+            <div class="stat-details">
+              <span class="stat-label">Active Enrolled</span>
+              <h3 id="stat-active-students" class="stat-value">0</h3>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon bg-warning-light">
+              <i class="fa-solid fa-star color-warning"></i>
+            </div>
+            <div class="stat-details">
+              <span class="stat-label">Average GPA</span>
+              <h3 id="stat-avg-gpa" class="stat-value">0.00</h3>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon bg-info-light">
+              <i class="fa-solid fa-building-columns color-info"></i>
+            </div>
+            <div class="stat-details">
+              <span class="stat-label">Departments</span>
+              <h3 id="stat-departments" class="stat-value">0</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-widgets">
+          <!-- Department breakdown -->
+          <div class="card widget-card">
+            <div class="card-header">
+              <h3><i class="fa-solid fa-chart-simple"></i> Students by Department</h3>
+            </div>
+            <div class="card-body">
+              <div id="department-list" class="department-list">
+                <!-- Dynamically filled -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Recently Enrolled -->
+          <div class="card widget-card">
+            <div class="card-header">
+              <h3><i class="fa-solid fa-clock-rotate-left"></i> Recently Added Students</h3>
+              <a href="#" class="view-all-link" id="view-all-students-link">View All</a>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Department</th>
+                      <th>Grade</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="recent-students-tbody">
+                    <!-- Dynamically filled -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- VIEW: STUDENTS DIRECTORY -->
+      <main id="view-students" class="content-view hidden">
+        <div class="card">
+          <!-- Filter / Search Controls Header -->
+          <div class="controls-bar">
+            <div class="search-box">
+              <i class="fa-solid fa-magnifying-glass search-icon"></i>
+              <input type="text" id="search-input" placeholder="Search by name, ID, email or department...">
+              <button id="clear-search-btn" class="clear-search-btn hidden" title="Clear Search">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+
+            <div class="filters-group">
+              <select id="filter-department" class="form-select">
+                <option value="">All Departments</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Electrical Engineering">Electrical Engineering</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Business Administration">Business Administration</option>
+                <option value="Biology">Biology</option>
+                <option value="Physics">Physics</option>
+                <option value="Chemistry">Chemistry</option>
+              </select>
+
+              <select id="filter-grade" class="form-select">
+                <option value="">All Grade Levels</option>
+                <option value="Freshman">Freshman</option>
+                <option value="Sophomore">Sophomore</option>
+                <option value="Junior">Junior</option>
+                <option value="Senior">Senior</option>
+              </select>
+
+              <select id="filter-status" class="form-select">
+                <option value="">All Statuses</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+
+              <button id="add-student-modal-btn" class="btn btn-primary">
+                <i class="fa-solid fa-plus"></i> Add Student
+              </button>
+            </div>
+          </div>
+
+          <!-- Student Table -->
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th data-sort="student_id" class="sortable">Student ID <i class="fa-solid fa-sort"></i></th>
+                  <th data-sort="name" class="sortable">Name <i class="fa-solid fa-sort"></i></th>
+                  <th data-sort="email" class="sortable">Contact <i class="fa-solid fa-sort"></i></th>
+                  <th data-sort="department" class="sortable">Department <i class="fa-solid fa-sort"></i></th>
+                  <th data-sort="grade_level" class="sortable">Grade <i class="fa-solid fa-sort"></i></th>
+                  <th data-sort="gpa" class="sortable">GPA <i class="fa-solid fa-sort"></i></th>
+                  <th data-sort="status" class="sortable">Status <i class="fa-solid fa-sort"></i></th>
+                  <th class="text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="students-table-body">
+                <!-- Rows dynamically generated -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Empty State -->
+          <div id="no-students-message" class="empty-state hidden">
+            <i class="fa-solid fa-folder-open empty-icon"></i>
+            <h3>No Students Found</h3>
+            <p>Try adjusting your search filters or add a new student record.</p>
+          </div>
+
+          <!-- Pagination Bar -->
+          <div class="pagination-bar">
+            <div class="pagination-info">
+              Showing <span id="page-start">0</span> to <span id="page-end">0</span> of <span id="total-records">0</span> records
+            </div>
+            <div class="pagination-controls">
+              <button id="prev-page-btn" class="btn btn-outline btn-sm" disabled>
+                <i class="fa-solid fa-chevron-left"></i> Previous
+              </button>
+              <span id="page-indicator" class="page-indicator">Page 1 of 1</span>
+              <button id="next-page-btn" class="btn btn-outline btn-sm" disabled>
+                Next <i class="fa-solid fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+
+    </div>
+  </div>
+
+  <!-- STUDENT MODAL (ADD / EDIT) -->
+  <div id="student-modal" class="modal-overlay hidden">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 id="modal-title">Add New Student</h3>
+        <button id="close-modal-btn" class="modal-close-btn">&times;</button>
+      </div>
+      <form id="student-form">
+        <input type="hidden" id="student-primary-id">
+        <div class="modal-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="student-id-input">Student ID <span class="required">*</span></label>
+              <input type="text" id="student-id-input" required placeholder="e.g. STU-1009">
+            </div>
+            <div class="form-group">
+              <label for="student-name-input">Full Name <span class="required">*</span></label>
+              <input type="text" id="student-name-input" required placeholder="e.g. John Doe">
+            </div>
+            <div class="form-group">
+              <label for="student-email-input">Email Address <span class="required">*</span></label>
+              <input type="email" id="student-email-input" required placeholder="e.g. john.doe@example.com">
+            </div>
+            <div class="form-group">
+              <label for="student-phone-input">Phone Number <span class="required">*</span></label>
+              <input type="text" id="student-phone-input" required placeholder="e.g. +1-555-0199">
+            </div>
+            <div class="form-group">
+              <label for="student-dept-input">Department <span class="required">*</span></label>
+              <select id="student-dept-input" required class="form-select">
+                <option value="">Select Department</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Electrical Engineering">Electrical Engineering</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Business Administration">Business Administration</option>
+                <option value="Biology">Biology</option>
+                <option value="Physics">Physics</option>
+                <option value="Chemistry">Chemistry</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="student-grade-input">Grade Level <span class="required">*</span></label>
+              <select id="student-grade-input" required class="form-select">
+                <option value="">Select Grade</option>
+                <option value="Freshman">Freshman</option>
+                <option value="Sophomore">Sophomore</option>
+                <option value="Junior">Junior</option>
+                <option value="Senior">Senior</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="student-gpa-input">GPA (0.00 - 4.00) <span class="required">*</span></label>
+              <input type="number" id="student-gpa-input" step="0.01" min="0" max="4" required placeholder="e.g. 3.75">
+            </div>
+            <div class="form-group">
+              <label for="student-status-input">Enrollment Status <span class="required">*</span></label>
+              <select id="student-status-input" required class="form-select">
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="cancel-modal-btn" class="btn btn-secondary">Cancel</button>
+          <button type="submit" id="save-student-btn" class="btn btn-primary">Save Student</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- DELETE CONFIRMATION MODAL -->
+  <div id="delete-modal" class="modal-overlay hidden">
+    <div class="modal-container modal-sm">
+      <div class="modal-header">
+        <h3>Confirm Deletion</h3>
+        <button id="close-delete-modal-btn" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body text-center">
+        <div class="delete-warning-icon">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <p>Are you sure you want to delete student <strong id="delete-student-name"></strong>?</p>
+        <p class="text-muted text-sm">This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer justify-center">
+        <button id="cancel-delete-btn" class="btn btn-secondary">Cancel</button>
+        <button id="confirm-delete-btn" class="btn btn-danger">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
